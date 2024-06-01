@@ -141,6 +141,24 @@ resource "aws_instance" "web_server" {
   security_groups             = [aws_security_group.ingress-ssh.id, aws_security_group.vpc-web.id, aws_security_group.vpc-ping.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.generated.key_name
+  connection {
+    user        = "ubuntu"
+    private_key = tls_private_key.generated.private_key_pem
+    host        = self.public_ip
+  }
+
+  provisioner "local-exec" {
+    command = "chmod 600 ${local_file.private_key.filename}"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo rm -rf /tmp",
+      "sudo git clone https://github.com/hashicorp/demo-terraform-101 /tmp",
+      "sudo sh /tmp/assets/setup-web.sh",
+    ]
+  }
+
   tags = {
     Name = "Ubuntu EC2 Server"
   }
@@ -149,6 +167,7 @@ resource "aws_instance" "web_server" {
     ignore_changes = [security_groups]
   }
 }
+
 
 resource "tls_private_key" "generated" {
   algorithm = "RSA"
