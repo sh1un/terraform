@@ -43,8 +43,7 @@ module "network" {
 
 ### Resources
 
+- [Shiun's Learning Journal - 20240601](https://shiun.notion.site/20240601-2fcfcea5f2d94aa1aaad78a519476d8b?pvs=4)
 - [Modules - Configuration Language | Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform/language/modules/syntax)
-
 - [https://github.com/btkrausen/hashicorp/blob/master/terraform/Hands-On Labs/Section 04 - Understand Terraform Basics/10 - Intro_to_the_Module_Block.md](https://github.com/btkrausen/hashicorp/blob/master/terraform/Hands-On%20Labs/Section%2004%20-%20Understand%20Terraform%20Basics/10%20-%20Intro_to_the_Module_Block.md)
-
 - https://github.com/hashicorp/terraform-cidr-subnets

@@ -60,3 +60,4 @@ $ terraform output -json
 - [Output Values - Configuration Language | Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform/language/values/outputs)
 
 - [https://github.com/btkrausen/hashicorp/blob/master/terraform/Hands-On Labs/Section 04 - Understand Terraform Basics/11 - Intro_to_the_Terraform_Output_Block.md](https://github.com/btkrausen/hashicorp/blob/master/terraform/Hands-On%20Labs/Section%2004%20-%20Understand%20Terraform%20Basics/11%20-%20Intro_to_the_Terraform_Output_Block.md)
+- [Shiun's Learning Journal - 20240601](https://shiun.notion.site/20240601-2fcfcea5f2d94aa1aaad78a519476d8b?pvs=4)

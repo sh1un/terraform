@@ -21,6 +21,6 @@ output "current_region_name" {
 
 ## Resources
 
-[Data | Terraform 的一百零一種姿勢](https://shazi7804.github.io/terraform-manage-guide/basic/data.html)
-
-[Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)
+- [Shiun's Learning Journal - 20240601](https://shiun.notion.site/20240601-2fcfcea5f2d94aa1aaad78a519476d8b?pvs=4)
+- [Data | Terraform 的一百零一種姿勢](https://shazi7804.github.io/terraform-manage-guide/basic/data.html)
+- [Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)

@@ -14,3 +14,6 @@ terraform {
   }
 }
 ```
+
+### Resources
+- [Shiun's Learning Journal - 20240601](https://shiun.notion.site/20240601-2fcfcea5f2d94aa1aaad78a519476d8b?pvs=4)
