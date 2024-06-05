@@ -41,3 +41,8 @@ terraform apply
 ```
 
 這些環境變數在 Debug Terraform 時非常有用，尤其是需要深入了解 Terraform 執行的內部細節時
+
+### Resources
+
+- [Shiun's Learning Journal - 20240605](https://www.notion.so/20240605-a29a522dba9d4e8eb7a60fe899595908?pvs=21)
+- [Debugging | Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform/internals/debugging)
