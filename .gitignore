@@ -5,3 +5,4 @@
 terraform-provider-*.exe
 LICENSE.txt
 .terraform
+*.pem
