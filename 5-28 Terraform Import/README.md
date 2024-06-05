@@ -1,6 +1,16 @@
 ## Import
 
+### 簡介
+
 Terraform Import 是 Terraform 中的一個功能，允許你將現有的基礎設施資源導入到 Terraform 的狀態文件中。這樣，你可以將已有的基礎設施與 Terraform 的配置文件同步，並開始使用 Terraform 來管理這些資源
+
+### 什麼時候需要用到 `terraform import`？
+
+> [!NOTE]
+> terraform import 並不是一個自動偵測 AWS 資源上的東西，然後自動幫忙寫程式碼的工具
+如果你以前沒有使用任何 IaC 的工具，都是直接在 AWS Console 上管理和創建資源，但現在想要導入 IaC，然後把那些「現有資源」導入到 Terraform 來管理，那你就會需要用到 `terraform import`
+
+`terraform import` 的主要目的是將已經存在的基礎設施資源導入到 Terraform 的狀態文件中，這樣你就可以用 Terraform 來管理這些資源。例如，如果你有一個已經存在的 AWS EC2 實例，而你現在想開始用 Terraform 來管理它，你需要導入這個實例以便 Terraform 知道它的存在和當前狀態
 
 ### Synopsis
 
