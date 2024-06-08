@@ -19,7 +19,8 @@ resource "aws_api_gateway_method" "proxy" {
   rest_api_id   = aws_api_gateway_rest_api.my_api.id
   resource_id   = aws_api_gateway_resource.root.id
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.authorizer.id
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
@@ -66,5 +67,15 @@ resource "aws_api_gateway_deployment" "deployment" {
 
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   stage_name  = "dev"
-  description = timestamp()
+  triggers = {
+    redeployment = timestamp()
+
+  }
+}
+
+resource "aws_api_gateway_authorizer" "authorizer" {
+  name          = "my-apigw-authorizer"
+  rest_api_id   = aws_api_gateway_rest_api.my_api.id
+  type          = "COGNITO_USER_POOLS"
+  provider_arns = [aws_cognito_user_pool.pool.arn]
 }
