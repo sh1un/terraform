@@ -27,7 +27,8 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   resource_id             = aws_api_gateway_resource.root.id
   http_method             = aws_api_gateway_method.proxy.http_method
   integration_http_method = "POST"
-  type                    = "MOCK"
+  type                    = "AWS"
+  uri                     = aws_lambda_function.html_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_method_response" "proxy" {
