@@ -1,2 +1,2 @@
-# terraform
-terraform
+# Terraform
+My Terraform Learning Journey!
