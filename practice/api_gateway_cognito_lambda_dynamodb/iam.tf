@@ -19,12 +19,14 @@ resource "aws_iam_role" "terraform_function_role" {
 
 }
 
+# Attach AWS managed policy to the role
 resource "aws_iam_role_policy_attachment" "terraform_lambda_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   role       = aws_iam_role.terraform_function_role.name
 
 }
 
+# Attach a cutom policy to the role
 resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
   name   = "lambda_dynamodb_policy"
   role   = aws_iam_role.terraform_function_role.name

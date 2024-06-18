@@ -28,7 +28,7 @@
                 "dynamodb:Update*",
                 "dynamodb:PutItem"
             ],
-            "Resource": "arn:aws:dynamodb:*:*:table/dishes" // DynamoDB table
+            "Resource": "arn:aws:dynamodb:*:*:table/dishes"
         }
     ]
   }
