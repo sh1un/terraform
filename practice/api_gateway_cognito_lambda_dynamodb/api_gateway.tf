@@ -56,3 +56,38 @@ resource "aws_api_gateway_integration" "list_dishes_lambda_integration" {
 #     "method.response.header.Access-Control-Allow-Credentials" = true
 #   }
 # }
+
+
+# Deployment
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.my_rest_api.id
+
+  depends_on = [aws_api_gateway_integration.list_dishes_lambda_integration]
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.rest_api_resource_dishes,
+      aws_api_gateway_integration.list_dishes_lambda_integration,
+      aws_api_gateway_method.list_dishes
+    ]))
+  }
+}
+
+
+resource "aws_api_gateway_stage" "dev" {
+  deployment_id = aws_api_gateway_deployment.deployment.id
+  stage_name    = "dev"
+  rest_api_id   = aws_api_gateway_rest_api.my_rest_api.id
+}
+
+# Logging
+resource "aws_api_gateway_method_settings" "all" {
+  rest_api_id = aws_api_gateway_rest_api.my_rest_api.id
+  stage_name  = aws_api_gateway_stage.dev.stage_name
+  method_path = "*/*"
+  settings {
+    logging_level      = "INFO"
+    metrics_enabled    = true
+    data_trace_enabled = true
+  }
+}
