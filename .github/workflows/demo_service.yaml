@@ -49,22 +49,37 @@ jobs:
       - name: Set environment variables
         id: set-env
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # For pull requests, we'll use the target branch
+            TARGET_BRANCH="${{ github.base_ref }}"
+          else
+            # For pushes, we'll use the current branch
+            TARGET_BRANCH="${{ github.ref }}"
+          fi
+
+          if [[ "$TARGET_BRANCH" == "main" ]]; then
             echo "ENVIRONMENT=prod" >> $GITHUB_ENV
             echo "TF_DIR=./practice/api_gateway_to_lambda_docker_to_dynamodb" >> $GITHUB_ENV
             echo "TF_VARS_FILE=prod.tfvars" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+          elif [[ "$TARGET_BRANCH" == "dev" ]]; then
             echo "ENVIRONMENT=dev" >> $GITHUB_ENV
             echo "TF_DIR=./practice/api_gateway_to_lambda_docker_to_dynamodb" >> $GITHUB_ENV
             echo "TF_VARS_FILE=dev.tfvars" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/local-dev" ]]; then
+          elif [[ "$TARGET_BRANCH" == "local-dev" ]]; then
             echo "ENVIRONMENT=local-dev" >> $GITHUB_ENV
             echo "TF_DIR=./practice/api_gateway_to_lambda_docker_to_dynamodb" >> $GITHUB_ENV
             echo "TF_VARS_FILE=local-dev.tfvars" >> $GITHUB_ENV
           else
-            echo "Unsupported branch: ${{ github.ref }}"
+            echo "Unsupported branch: $TARGET_BRANCH"
             exit 1
           fi
+
+          # Debug output
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: $TARGET_BRANCH"
+          echo "Environment: $ENVIRONMENT"
+          echo "TF_DIR: $TF_DIR"
+          echo "TF_VARS_FILE: $TF_VARS_FILE"
 
       - name: Debug Environment
         run: |
