@@ -2,7 +2,8 @@ data "aws_ecr_authorization_token" "token" {
 }
 
 locals {
-  name = "demo-lambda-docker-image"
+  name        = "demo-lambda-docker-image"
+  source_path = abspath(path.module)
 }
 
 provider "docker" {
@@ -14,20 +15,29 @@ provider "docker" {
 }
 
 
+
+
 module "aws_lambda" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "7.7.0"
 
   function_name  = "from_terraform_module_function"
+  description    = "This is a demo, for lambda container image"
   create_package = false
   package_type   = "Image"
   image_uri      = module.docker_image.image_uri
+  timeout        = 60
+
+  publish = true
 
 
   environment_variables = {
     "environment" = "poc",
   }
 
+  tags = {
+    "Terraform" = "true"
+  }
 }
 
 module "docker_image" {
@@ -35,10 +45,12 @@ module "docker_image" {
   version = "7.7.0"
 
   create_ecr_repo = true
+  keep_remotely   = true
+  use_image_tag   = true
   ecr_repo        = local.name
 
-  use_image_tag    = true
-  image_tag        = "1.0"
+  image_tag        = "latest"
   docker_file_path = "./Dockerfile"
-  source_path      = abspath(path.module)
+  source_path      = local.source_path
+
 }
