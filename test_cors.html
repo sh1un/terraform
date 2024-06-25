@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Call API Example</title>
+  </head>
+  <body>
+    <h1>API Response</h1>
+    <div id="result"></div>
+
+    <script>
+      // fetch API, Use POST method
+      fetch(
+        "https://api.tpet.awseducate.systems/dev/files?file_extension=xlsx&limit=3",
+        {
+          method: "GET",
+        }
+      )
+        .then((response) => response.json()) // 將回應解析為 JSON
+        .then((data) => {
+          // 在網頁上顯示 API 回應內容
+          const resultDiv = document.getElementById("result");
+          resultDiv.textContent = JSON.stringify(data, null, 2); // 將 JSON 格式化輸出
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    </script>
+  </body>
+</html>
