@@ -17,3 +17,7 @@ variable "domain_name" {
   description = "Domain name, for example: example.com"
   default     = "awseducate.systems"
 }
+
+variable "dynamodb_table" {
+  description = "Current service's DynamoDB table name"
+}
