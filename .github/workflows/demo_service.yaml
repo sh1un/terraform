@@ -119,6 +119,6 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && github.event.created == false
         run: terraform apply -auto-approve -input=false -var-file="${{ env.TF_VARS_FILE }}"
         working-directory: ${{ env.TF_DIR }}
