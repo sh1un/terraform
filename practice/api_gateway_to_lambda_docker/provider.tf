@@ -4,7 +4,7 @@ provider "aws" {
     tags = {
       "Terraform"   = "true",
       "Environment" = var.environment,
-      "Project"     = "LambdaDockerDemo"
+      "Project"     = "APIGatewayLambdaDockerDemo"
     }
   }
 }
