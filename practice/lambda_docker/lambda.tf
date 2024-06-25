@@ -12,8 +12,7 @@ resource "random_string" "this" {
 
 locals {
   source_path                     = path.module # Path to folder containing application code
-  function_name_and_ecr_repo_name = "${var.environment}-${local.service}-from_terraform_module_function-${random_string.this.result}"
-  service                         = "demo_service"
+  function_name_and_ecr_repo_name = "${var.environment}-${var.service}-from_terraform_module_function-${random_string.this.result}"
   path_include                    = ["**"]
   path_exclude                    = ["**/__pycache__/**"]
   files_include                   = setunion([for f in local.path_include : fileset(local.source_path, f)]...)
@@ -52,13 +51,13 @@ module "lambda_container_image" {
 
   environment_variables = {
     "ENVIRONMENT" = var.environment,
-    "SERVICE"     = local.service
+    "SERVICE"     = var.service
   }
 
   tags = {
     "Terraform"   = "true",
     "Environment" = var.environment,
-    "Service"     = local.service
+    "Service"     = var.service
 
   }
 }

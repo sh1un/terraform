@@ -1,0 +1,3 @@
+bucket = "terraform-state-20240618152116874600000001"
+region = "us-east-1"
+key    = "lambda_docker/dev/terraform.tfstate"
