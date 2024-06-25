@@ -1,3 +1,3 @@
 bucket = "terraform-state-20240618152116874600000001"
-region = "ap-northeast-1"
+region = "us-west-2"
 key    = "lambda_docker/prod/terraform.tfstate"
