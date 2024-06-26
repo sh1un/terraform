@@ -16,7 +16,7 @@ def lambda_handler(event, context):
     try:
         response = table.scan()
         items = response.get("Items", [])
-        print("test1")
+        print("test12")
 
         logger.info("Scan succeeded: %s", json.dumps(items))
 
