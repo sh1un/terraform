@@ -37,6 +37,11 @@ jobs:
         run: terraform init -backend-config="preview.tfbackend" -reconfigure
         working-directory: ${{ env.TF_DIR }}
 
+      - name: Terraform Destroy (Cleanup)
+        run: terraform destroy -auto-approve -var-file='preview.tfvars'
+        working-directory: ${{ env.TF_DIR }}
+        continue-on-error: true
+
       - name: Terraform Plan
         run: terraform plan -var-file='preview.tfvars' -out=tfplan
         working-directory: ${{ env.TF_DIR }}
@@ -104,6 +109,11 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend-config="${{ env.ENVIRONMENT }}.tfbackend" -reconfigure
         working-directory: ${{ env.TF_DIR }}
+
+      - name: Terraform Destroy (Cleanup)
+        run: terraform destroy -auto-approve -var-file='${{ env.TF_VARS_FILE }}'
+        working-directory: ${{ env.TF_DIR }}
+        continue-on-error: true
 
       - name: Terraform Plan
         run: terraform plan -var-file='${{ env.TF_VARS_FILE }}' -out=tfplan
