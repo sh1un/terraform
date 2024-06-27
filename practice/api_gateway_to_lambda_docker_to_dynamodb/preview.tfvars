@@ -1,0 +1,5 @@
+aws_region         = "us-west-1"
+environment        = "preview"
+service_underscore = "demo_service"
+service_hyphen     = "demo-service"
+dynamodb_table     = "demo"
