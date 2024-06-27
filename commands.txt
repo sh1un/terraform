@@ -5,18 +5,22 @@ aws cognito-idp admin-initiate-auth --user-pool-id us-east-1_WX9HKMRuq --client-
 terraform init -backend-config="prod.tfbackend" -reconfigure
 terraform init -backend-config="dev.tfbackend" -reconfigure
 terraform init -backend-config="local-dev.tfbackend" -reconfigure
+terraform init -backend-config="preview.tfbackend" -reconfigure
 
 # terraform plan
 terraform plan -var-file='prod.tfvars'
 terraform plan -var-file='dev.tfvars'
 terraform plan -var-file='local-dev.tfvars'
+terraform plan -var-file='preview.tfvars'
 
 # terraform apply
 terraform apply -var-file='prod.tfvars'
 terraform apply -var-file='dev.tfvars'
 terraform apply -var-file='local-dev.tfvars'
+terraform apply -var-file='preview.tfvars'
 
 # terraform destroy
 terraform destroy -var-file='prod.tfvars'
 terraform destroy -var-file='dev.tfvars'
 terraform destroy -var-file='local-dev.tfvars'
+terraform destroy -var-file='preview.tfvars'
