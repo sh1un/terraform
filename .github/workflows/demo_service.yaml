@@ -21,6 +21,10 @@ permissions:
   issues: write
   pull-requests: write
 
+defaults:
+  run:
+    working-directory: ${{ env.TF_DIR }}
+
 jobs:
   preview:
     name: "Deploy Preview Environment"
@@ -34,49 +38,69 @@ jobs:
           terraform_version: 1.8.3
 
       - name: Terraform Init
+        id: init
         run: terraform init -backend-config="preview.tfbackend" -reconfigure
-        working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Destroy (Cleanup)
+        id: destroy
         run: terraform destroy -auto-approve -var-file='preview.tfvars'
-        working-directory: ${{ env.TF_DIR }}
         continue-on-error: true
 
       - name: Terraform Plan
+        id: plan
         run: terraform plan -var-file='preview.tfvars'
-        working-directory: ${{ env.TF_DIR }}
+        continue-on-error: true
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -var-file='preview.tfvars' -auto-approve | tee ${{ env.TF_DIR }}/apply_output.txt
-        working-directory: ${{ env.TF_DIR }}
+        run: terraform apply -var-file='preview.tfvars' -auto-approve
+        continue-on-error: true
 
-      - name: Comment PR
-        uses: actions/github-script@v6
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          APPLY: "terraform\n${{ steps.apply.outputs.stdout }}"
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
-            const applyOutput = fs.readFileSync('${{ env.TF_DIR }}/apply_output.txt', 'utf8');
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Apply Results');
+            });
+
             const output = `#### Terraform Apply Results 🌟
             Preview environment has been deployed. You can now test your changes.
 
             <details><summary>Show Actual Apply</summary>
 
-            \`\`\`
-            ${applyOutput}
+            \`\`\`\n
+            ${{ steps.apply.outputs.stdout }}
             \`\`\`
 
             </details>
 
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output,
+              });
+            }
 
   cleanup_preview:
     name: "Cleanup Preview Environment"
@@ -91,11 +115,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -backend-config="preview.tfbackend" -reconfigure
-        working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve -var-file='preview.tfvars'
-        working-directory: ${{ env.TF_DIR }}
 
   deploy:
     name: "Deploy to Target Environment"
@@ -123,18 +145,20 @@ jobs:
           fi
 
       - name: Terraform Init
+        id: init
         run: terraform init -backend-config="${{ env.ENVIRONMENT }}.tfbackend" -reconfigure
-        working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Destroy (Cleanup)
+        id: destroy
         run: terraform destroy -auto-approve -var-file='${{ env.TF_VARS_FILE }}'
-        working-directory: ${{ env.TF_DIR }}
         continue-on-error: true
 
       - name: Terraform Plan
+        id: plan
         run: terraform plan -var-file='${{ env.TF_VARS_FILE }}' -out=tfplan
-        working-directory: ${{ env.TF_DIR }}
+        continue-on-error: true
 
       - name: Terraform Apply
+        id: apply
         run: terraform apply -var-file='${{ env.TF_VARS_FILE }}' -auto-approve
-        working-directory: ${{ env.TF_DIR }}
+        continue-on-error: true
