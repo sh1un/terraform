@@ -1,4 +1,4 @@
-name: "Demo service Infrastructure Change Management Pipeline with GitHub Actions"
+name: "Demo Service Infrastructure Change Management Pipeline with GitHub Actions"
 
 on:
   pull_request:
@@ -55,11 +55,24 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const output = `#### Terraform Apply Results 🌟
+            Preview environment has been deployed. You can now test your changes.
+
+            <details><summary>Show Actual Apply</summary>
+
+            \`\`\`
+            ${context.payload}
+            \`\`\`
+
+            </details>
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Preview environment has been deployed. You can now test your changes.'
+              body: output
             })
 
   cleanup_preview:
