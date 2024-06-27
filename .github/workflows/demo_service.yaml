@@ -47,6 +47,7 @@ jobs:
         working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Apply
+        id: apply
         run: terraform apply -var-file='preview.tfvars' -auto-approve
         working-directory: ${{ env.TF_DIR }}
 
@@ -55,13 +56,15 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            const fs = require('fs');
+            const applyOutput = fs.readFileSync('apply_output.txt', 'utf8');
             const output = `#### Terraform Apply Results 🌟
             Preview environment has been deployed. You can now test your changes.
 
             <details><summary>Show Actual Apply</summary>
 
             \`\`\`
-            ${context.payload}
+            ${applyOutput}
             \`\`\`
 
             </details>
