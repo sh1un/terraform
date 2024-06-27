@@ -47,7 +47,7 @@ jobs:
         working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -var-file='preview.tfvars'
         working-directory: ${{ env.TF_DIR }}
 
       - name: Comment PR
@@ -120,5 +120,5 @@ jobs:
         working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -var-file='${{ env.TF_VARS_FILE }}' -auto-approve
         working-directory: ${{ env.TF_DIR }}
