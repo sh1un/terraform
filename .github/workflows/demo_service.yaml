@@ -43,11 +43,11 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
-        run: terraform plan -var-file='preview.tfvars' -out=tfplan
+        run: terraform plan -var-file='preview.tfvars'
         working-directory: ${{ env.TF_DIR }}
 
       - name: Terraform Apply
-        run: terraform apply -var-file='preview.tfvars'
+        run: terraform apply -var-file='preview.tfvars' -auto-approve
         working-directory: ${{ env.TF_DIR }}
 
       - name: Comment PR
