@@ -24,7 +24,7 @@ locals {
 provider "docker" {
   registry_auth {
     address  = format("%v.dkr.ecr.%v.amazonaws.com", data.aws_caller_identity.this.account_id, var.aws_region)
-    username = data.aws_ecr_authorization_token.token.user_name
+    username = data.aws_ecr_authorization_token.token.username
     password = data.aws_ecr_authorization_token.token.password
   }
 }
