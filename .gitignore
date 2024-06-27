@@ -1,7 +1,6 @@
 # Terraform state files
 *.tfstate
 *.tfstate.*
-.terraform.lock.hcl
 terraform-provider-*.exe
 LICENSE.txt
 .terraform
